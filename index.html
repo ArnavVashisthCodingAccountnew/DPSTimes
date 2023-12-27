@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>DPS Times</title>
+
+    <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-storage.js"></script>
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <link href="https://fonts.googleapis.com/css?family=Yeon+Sung&display=swap" rel="stylesheet"><meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <style>
+        /* Style for post content */
+.posts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width:700px;
+    height:400px;
+}
+
+.post h2 {
+    font-size: 50px;
+    margin-bottom: 5px;
+    color: #333;
+    font-family: 'HeaderFont', sans-serif;
+
+}
+
+.post p {
+    font-size: 25px;
+    color: #555;
+    line-height: 1.5;
+}
+
+        @font-face { font-family: 'HeaderFont'; src: url('headerfont.otf') format('opentype'); }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        /* Header styles */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        /* Header text styles */
+        .header p {
+            font-family: 'HeaderFont', sans-serif;
+            font-size: 1.5em;
+            color: #000000;
+            margin: 0;
+        }
+        /* Header motto styles */
+        .header h9 {
+            font-size: 1em;
+            margin: 0;
+        }
+        /* Form styles */
+        .postForm {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .postForm input[type="text"],
+        .postForm textarea,
+        .postForm input[type="file"],
+        .postForm button {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .postForm button {
+            background-color: blueviolet;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        /* Post styles */
+        .posts {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        /* Media queries for responsiveness */
+        @media only screen and (max-width: 768px) {
+            /* Add responsive styles here */
+        }
+        
+        /* Style for the buttons container */
+        .buttons-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        /* Style for the buttons */
+        .buttons-container button {
+            padding: 12px 24px;
+            margin: 8px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4285f4;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        /* Hover effect for buttons */
+        .buttons-container button:hover {
+            background-color: #3367d6;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <p style="font-size:30px;margin-bottom:0;margin-top:0;">DPS Times</p>
+        <h9 style="font-style: italic;margin-bottom:0;margin-top:0;">The Standing may fall but the moving shall ever stay</p>
+    </div>
+    <!-- Three Buttons -->
+  <!-- Three Buttons --><br><br>
+  <div class="container text-center mt-5">
+<!-- Bootstrap Buttons -->
+<button type="button" class="btn btn-primary btn-lg mr-3" onClick="window.location.href='genzcodehub-main/genzcodehub.html'">Join Secure Chatrooms</button>
+<button type="button" class="btn btn-success btn-lg mr-3" onClick="window.location.href='https://demos.openvidu.io/openvidu-call/#/'">Join Meeting</button>
+<button type="button" class="btn btn-info btn-lg" onClick="window.location.href='https://docs.google.com/spreadsheets/d/11vPq8FOXyQ9dCWBC87F8xQlrwQBFMKJmo1LH8YxPylk/edit?usp=sharing'">StudentsDB Dps</button>
+
+</div>
+
+    <div class="postForm">
+        <h2>Submit a story</h2>
+        <form id="storyForm">
+            <label for="postTitle">Post Title</label>
+            <input type="text" id="postTitle" placeholder="Post Title">
+            <label for="postContent">Write about it</label>
+            <textarea id="postContent" placeholder="Post Content"></textarea>
+            <button onclick="submitPost()">Submit</button>
+        </form>
+    </div>
+
+    <div class="posts">
+        <!-- Posts will be inserted here -->
+    </div>
+
+
+<script>
+    // Your web app's Firebase configuration
+
+
+
+  // Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCGelR9-lx9He1rOV8lIiZI4LwDCd9vXYI",
+  authDomain: "dps-times.firebaseapp.com",
+  databaseURL: "https://dps-times-default-rtdb.firebaseio.com",
+  projectId: "dps-times",
+  storageBucket: "dps-times.appspot.com",
+  messagingSenderId: "156102541774",
+  appId: "1:156102541774:web:884867358c9cadb5e22b9f"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database(); // Initialize Realtime Database
+const storage = firebase.storage(); // Initialize Storage
+// Function to upload post content to RealtimeDB
+
+function submitPost() {
+    let postContent = document.getElementById('postContent').value;
+    let postTitle = document.getElementById('postTitle').value;
+
+    db.ref('posts').push().set({
+        content: postContent,
+        title:postTitle
+    });
+}
+// Attach the function to the submit button
+document.getElementById('storyForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    submitPost();
+});
+// Function to display posts from RealtimeDB
+function displayPosts() {
+    let postsRef = db.ref('posts');
+    // Detach the previous 'child_added' event handler
+    postsRef.off('child_added');
+
+    postsRef.on('child_added', function(post) {
+        let postVal = post.val();
+        let postContent = postVal.content;
+        let postTitle = postVal.title;
+
+        let postContainer = document.createElement('div');
+        postContainer.classList.add('post');
+        postContainer.innerHTML = `
+            <h2>${postTitle}</h2>
+            <p>${postContent}</p>
+        `;
+        document.querySelector('.posts').appendChild(postContainer);
+    });
+}
+
+// Call displayPosts when the DOM is fully loaded
+document.addEventListener("DOMContentLoaded", function() {
+    displayPosts();
+});
+
+
+</script>
+</body>
+</html>

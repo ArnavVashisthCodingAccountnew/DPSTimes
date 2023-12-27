@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Article Details</title>
+    <style>
+        /* Styles for details page */
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        /* Header styles */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        /* Sticky header styles */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        /* Article content styles */
+        .article-details {
+            max-width: 800px;
+            margin: 20px auto;
+        }
+        .article-content img {
+            max-width: 100%;
+            height: auto;
+        }
+        .article-content h1 {
+            margin-top: 10px;
+        }
+        /* Media queries for responsiveness */
+        @media only screen and (max-width: 768px) {
+            /* Add responsive styles here */
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Header -->
+    <div class="sticky-header">
+        <h1>Article Details</h1>
+    </div>
+
+    <!-- Article Details -->
+    <div class="article-details">
+        <div class="article-content">
+            <!-- Display fetched article details here -->
+        </div>
+    </div>
+
+    <!-- Firebase scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
+    <script>
+        // Initialize Firebase
+        // TODO: Replace with your project's customized code snippet
+        var config = {
+            apiKey: "<API_KEY>",
+            authDomain: "<PROJECT_ID>.firebaseapp.com",
+            databaseURL: "https://<DATABASE_NAME>.firebaseio.com",
+            storageBucket: "<BUCKET>.appspot.com",
+        };
+        firebase.initializeApp(config);
+        var db = firebase.firestore();
+
+        // Fetch and display details of the article
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+
+        const articleContent = document.querySelector('.article-content');
+        db.collection("posts").doc(postId).get().then((doc) => {
+            if (doc.exists) {
+                const postData = doc.data();
+                articleContent.innerHTML = `
+                    <img src="${postData.image}" alt="${postData.title}">
+                    <h1>${postData.title}</h1>
+                    <p>${postData.content}</p>
+                `;
+            } else {
+                articleContent.innerHTML = '<p>Article not found</p>';
+            }
+        });
+    </script>
+</body>
+</html>
